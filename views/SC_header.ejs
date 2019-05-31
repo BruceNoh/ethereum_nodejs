@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    
+	<meta content="text/html; charset=utf-8" http-equiv=content-type>
+	<meta name=generator content="mshtml 8.00.6001.18852">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title> 3K대학교 증명정보시스템 </title>
+	
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        a {
+            color: black;
+        }
+        a:hover {
+            color: black;
+        }
+        .h6 {
+            color:  green;
+        }
+        .rightDiv {
+            width: 260px;
+            }
+        .scale {
+            transform: scale(1);
+            -webkit-transform: scale(1);
+            -moz-transform: scale(1);
+            -ms-transform: scale(1);
+            -o-transform: scale(1);
+            transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+        }
+        .scale:hover {
+            transform: scale(1.2);
+            -webkit-transform: scale(1.2);
+            -moz-transform: scale(1.2);
+            -ms-transform: scale(1.2);
+            -o-transform: scale(1.2);
+        }
+        .imgeffect {width:250px; height:300px; overflow:hidden }   /* 부모를 벗어나지 않고 내부 이미지만 확대 */
+    </style>        
+    <script>
+        function comma(str) {
+            str = String(str);
+            return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+        }
+    </script>  
+ <!--추가 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+    <link type="text/css" href="http://www.uccxml.com/xdrp/baseXML/lib/css/soaxml_webformReset.css" rel="stylesheet"  media="screen"/>
+	<link type="text/css" href="http://www.uccxml.com/xdrp/baseXML/lib/css/uniform.default.css" rel="stylesheet" media="screen" />
+    <link type="text/css" href="http://www.uccxml.com/xdrp/baseXML/lib/css/jquery-ui.1.10.3.smoothness.css" rel="stylesheet" media="screen" />
+    <!-- <link rel="shortcut icon" href="http://www.3ksoftware.com/favicon.ico"/> -->
+	<script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/bxControl.js"></script>
+	<script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/bxCommon.js"></script>
+	<script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/jquery-ui.1.10.3.min.js"></script>
+	<script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/jquery.uniform.js"></script>
+	<script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/jquery.timepicker.js"></script>
+	<script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/jSignature.custom.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+			$("input, textarea, select, button").uniform();
+			$( "#datepicker_20190502_162128" ).datepicker({dateFormat: "yy-mm-dd", changeMonth:true, changeYear:true, yearRange:"1950:2050"});
+            $( ".bxTimePicker" ).timepicker({ 'scrollDefaultNow': true });
+		});
+	</script>
+	<script type="text/javascript">
+		function basexml_checktype() {
+		}
+	</script>
+    <script type="text/javascript" src="http://www.uccxml.com/xdrp/baseXML/lib/scripts/bxFormForMongo.js"></script>
+<!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+</head>
+
+<body>
+        
+    <div class="container" style="padding-top:10px;">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <!-- 오른쪽 메뉴바 -->
+                    <!-- <button type="button" class="collapsed navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                    </button>  -->
+                    <a href="/home" class="navbar-brand">3K대학교</a>
+                </div> 
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+                    <ul class="nav navbar-nav navbar-center">
+                        <li>
+                            <a href="/home">인터넷증명발급센터</a>
+                        </li>
+                        <!-- <li>
+                            <a href="/collections/collections">Collection</a>
+                        </li>
+                        <li><a href="/qna/list">Q&A</a></li> -->
+                    </ul> 
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if(isLogin){%>
+                            <li ><a href="/accounts/logout" onclick="return confirm('로그아웃 하시겠습니까?')">LOGOUT</a></li>
+                            <li><a href="/accounts/myinfo">학생정보</a></li>
+                            <li><a href="/accounts/acceptList">승인조회</a></li>
+                            <li><a href="/accounts/wallet">Wallet</a></li>
+
+                        <%}else{%>
+                            <li><a href="/accounts/login">Login</a></li>
+                            <li><a href="/accounts/join">학생등록</a></li>
+                        <%}%>
+                        
+                        
+                        <!-- <li><a href="/cart">CART</a></li>
+                        <li><a href="/chat">CHAT</a></li>
+                        <li><a href="/checkout/nomember">구매조회</a></li>  -->
+                    </ul>
+                </div>     
+        </nav>
+ <!-- 추가끝 -->

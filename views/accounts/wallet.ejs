@@ -1,0 +1,191 @@
+ <% include ../header.ejs %>
+
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">My Wallet 정보</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" action="" id="join_form" method="post">
+                            <fieldset>
+                                <li>학번</li>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="학번" name="user_id" readonly type="text" value="<%= user.user_id %>" autofocus="" required="">
+                                </div>
+                                <li>전공</li>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="전공" name="major" readonly type="text" value="<%= user.major %>" required="">
+                                </div>
+                                <li>블록체인 ID</li>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="블록체인 아이디" id="blockchainid" name="blockchainid" readonly type="text" value="<%= user.blockchainid %>" required="">
+                                </div>
+                                <li>블록체인 비밀번호</li>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="블록체인 비밀번호" id="blockchainpwd" name="blockchainpwd" readonly type="password" value="<%= user.blockchainpwd %>" required="">
+                                </div>
+                                <li>이름</li>
+                                <div class="form-group">
+                                    <input class="form-control" id="onlyHangul" placeholder="user_name" name="user_name" readonly type="text" value="<%= user.user_name %>" autofocus="" required="">
+                                </div>
+                                <li>Ether 잔고</li>
+                                <div class="form-group">
+                                    <input class="form-control" id="onlyHangul" placeholder="Ether 잔고" name="cur_balance" readonly type="text" value="<%= user.cur_balance %>" autofocus="" required="">
+                                </div>
+                                <div class="form-group">
+                                        <input type="button" onclick="login();" value="블록체인 계정인증"></input>
+                                        <h2 id="instructor"></h2>
+                                </div>
+                            </fieldset>
+                    </div>
+                            
+                        </form>
+                        <h2 id="instructor"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<script type="text/javascript">
+    // var url = "http://220.76.95.91:8546"; // 서버 URL
+    var url = "http://220.76.95.91:8545"; // 서버 URL
+        console.log(url);
+        // var blockchainid;
+        // console.log(blockchainid);
+        var web3 = new Web3();
+        var provider = new web3.providers.HttpProvider(url); // 블록체인 노드접속
+        web3.setProvider(provider);
+        
+           
+        // web3.eth.defaultAccount = web3.eth.accounts[1];
+        web3.eth.defaultAccount = web3.eth.accounts[blockchainid];
+        var ABI = [{"constant":false,"inputs":[{"name":"_contractFile","type":"string"},{"name":"_contractHash","type":"bytes32"}],"name":"issue","outputs":[],"payable":false,"type":"function","stateMutability":"nonpayable"},{"constant":true,"inputs":[],"name":"getContracts","outputs":[{"name":"","type":"bytes32[]"}],"payable":false,"type":"function","stateMutability":"view"},{"constant":true,"inputs":[{"name":"_contractHash","type":"bytes32"}],"name":"getContract","outputs":[{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"bytes32"}],"payable":false,"type":"function","stateMutability":"view"}];
+        // 연결할 Contract(CounterMaster) 주소 
+        var master = web3.eth.contract(ABI).at("0x618CD4dCB28C6a93e55A95AFc66C6850E19648BE");
+        var CounterAddressList = master.getCounterAddressList();
+
+        // result = web3.eth.sendTransaction({
+        //                         from : sender, 
+        //                         to : receiver, 
+        //                         value : web3.toWei(eth_cash, 'ether')});
+        // var address = web3.eth.accounts[0];
+        // var result2 = web3.eth.getTransaction(address); //트랜잭션 해쉬 받은 코드
+        // var myethereum = web3.eth.fromWei(web3.eth.getBalance(address), 'ether');
+
+        // alert(JSON.stringify(myethereum));
+        // $("#myether").val(JSON.stringify(myethereum));
+
+
+        // 로그인(Unlock)
+        function login() {
+            var blockchainid = $("#blockchainid").val();
+            var blockchainpwd = $("#blockchainpwd").val();
+            var JSONdata = createJSONdata("personal_unlockAccount", [ blockchainid, blockchainpwd, 30 ]);
+
+            executeJsonRpc(url, JSONdata, function success(data) {
+                //alert(data.error);
+                // 로그인 성공
+                if (data.error == null) {
+                    console.log("login success!");
+                    document.getElementById("instructor").innerHTML = "계정 인증성공";
+                } else {
+                    // 로그인 실패
+                    console.log("login failure");
+                    document.getElementById("instructor").innerHTML = "계정 인증실패";
+                }
+                init();
+            }, function error(data) {
+                // 로그인 실패
+                console.log("data receive failure");
+                document.getElementById("instructor").innerHTML = "관리자에게 문의";
+            });
+        }
+
+
+            // JSON 메시지 생성
+    function createJSONdata(method, params) {
+        var JSONdata = {
+            "id":8,
+            "jsonrpc" : "2.0",
+            "method" : method,
+            "params" : params
+            };
+        return JSONdata;
+    }
+
+    // JSON-RPC 실행
+    function executeJsonRpc(url_exec, JSONdata, success, error) {
+        $.ajax({
+            type : 'post',
+            url : url_exec,
+            data : JSON.stringify(JSONdata),
+            contentType : 'application/JSON',
+            dataType : 'JSON',
+            scriptCharset : 'utf-8',
+            //scriptCharset : 'euc-kr',
+            success : function(data) {
+                //alert(data);
+                //alert(data.code);
+                //alert(data.result);
+                success(data);
+            },
+            error : function(data) {
+                error(data);
+            }
+        });
+    }
+
+    // JSON-RPC 실행
+    function checkTrResult(hashVal) {
+        //var JSONdata = createJSONdata("eth_getTransactionByHash", ["0x9faa7817dd5e926a5fec6adecc3d73d4dc1f3d97d7b8278786aa794646d8c974"]);
+        var JSONdata = createJSONdata("eth_getTransactionByHash", [hashVal]);
+        executeJsonRpc(url, JSONdata, function success(data) {
+            //alert(data.error);
+            // 로그인 성공
+            if (data.error == null) {
+                //alert(data);
+                //alert(data.result.blockNumber);ccc
+                var rst = parseInt(data.result.blockNumber, 16);
+                //alert(rst);
+                ///return rst;
+                console.log("Result Check success!");
+            } else {
+                // 로그인 실패
+                console.log("Result Check error1111");
+            }
+            //init();
+        }, function error(data) {
+            // 로그인 실패ccc
+            console.log("Result Check error222");
+        });
+    }
+
+    // JSON-RPC 실행
+    function checkTrResultDisp() {
+        //var JSONdata = createJSONdata("eth_getTransactionByHash", ["0x9faa7817dd5e926a5fec6adecc3d73d4dc1f3d97d7b8278786aa794646d8c974"]);
+        var JSONdata = createJSONdata("eth_getTransactionByHash", [document.getElementById("trHash").value]);
+        executeJsonRpc(url, JSONdata, function success(data) {
+            //alert(data.error);
+            // 로그인 성공
+            if (data.error == null) {
+                //alert(data);
+                //alert(data.result.blockNumber);
+                var rst = parseInt(data.result.blockNumber, 16);
+                //alert(rst);
+                ///return rst;
+                console.log("Result Check success!");
+            } else {
+                // 로그인 실패
+                console.log("Result Check error1111");
+            }
+            //init();
+        }, function error(data) {
+            // 로그인 실패ccc
+            console.log("Result Check error222");
+        });
+    }
+    </script>
+
+<% include ../footer.ejs %>

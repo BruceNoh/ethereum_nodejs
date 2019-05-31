@@ -1,0 +1,112 @@
+<% include ../header.ejs %>
+
+    <br/>   
+    
+
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">거래정보</a>
+              </li>
+              <li class="breadcrumb-item active">거래내역</li>
+            </ol>
+        <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-table"></i>거래 내역</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr align="center">
+                        <th width="10%" style="vertical-align: middle;">Hash</th>
+                        <th width="1%" style="vertical-align: middle;">From</th>
+                        <th width="1%" style="vertical-align: middle;">To</th>
+                        <th width="1%" style="vertical-align: middle;">Gas</th>
+                        <th width="1%" style="vertical-align: middle;">GasPrice</th>
+                        <!-- <th width="1%" style="vertical-align: middle;">Time</th> -->
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr align="center">
+                        <th><Hash</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Gas</th>
+                        <th>GasPrice</th>
+                        <!-- <th>Time</th> -->
+                    </tr>
+                </tfoot>
+                    <tbody>
+                    <% transaction.forEach(function(transaction){ %>
+                    <tr align="center">
+                        <td style="vertical-align: middle; font-size: 0.7em;">
+                            <a href="/accounts/history/<%= transaction.id %>">
+                            <%= transaction.t_hash.replace(/\"/gi, ""); %>
+                            </a>
+                        </td>
+                        <td style="vertical-align: middle; font-size: 0.7em;">
+                            </a><%= transaction.from %></a>
+                        </td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transaction.to %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transaction.gas %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transaction.gasPrice %></td>                        
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+
+
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-12" align="center">
+                <!-- 페이징 처리 -->
+                <nav>
+                    <ul class="pagination">
+                        <li>
+                            <a href="<%= paginate.href(true) %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    <% pages.forEach(function(page){ %>
+                        <li class="<%= paginate.page == page.number ? 'active' : ''%>">
+                            <a href="<%= page.url %>"><%= page.number %></a>
+                        </li>
+                    <%})%>
+                    <%if(paginate.hasNextPages(pageCount)){%>
+                        <li>
+                            <a href="<%= paginate.href() %>">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    <%}%>
+                    </ul>
+                </nav>
+          </div>
+        </div>
+      </div>
+    
+        
+
+<style type="text/css">
+.masonry-grid img { max-width: 260px; }
+</style>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript">
+    var $masonry_container = $('#masonry_container');
+    $masonry_container.imagesLoaded(function(){
+      $masonry_container.masonry({
+        itemSelector : '.masonry-grid',
+        columnWidth : 270
+      });
+    });
+</script>
+
+<% include ../footer.ejs %>

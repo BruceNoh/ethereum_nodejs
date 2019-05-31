@@ -1,0 +1,99 @@
+<% include ../header.ejs %>
+
+    <br/>   
+    
+
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">거래정보</a>
+              </li>
+              <li class="breadcrumb-item active">거래내역</li>
+            </ol>
+        <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-table"></i>거래 내역</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr align="center">
+                        <th width="5%" style="vertical-align: middle;">번호</th>
+                        <th width="20%" style="vertical-align: middle;">트랜젝션 Hash</th>
+                        <th width="20%" style="vertical-align: middle;">내 계정</th>
+                        <th width="20%" style="vertical-align: middle;">관리자 계정</th>
+                        <th width="10%" style="vertical-align: middle;">eth</th>
+                        <th width="10%" style="vertical-align: middle;">잔고</th>
+                        <th width="15%" style="vertical-align: middle;">생성시간</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                </tfoot>
+                    <tbody>
+                    <% transactionList.forEach(function(transactionList){ %>
+                    <tr align="center">
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transactionList.id %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><a href="javascript:getTransacionss('<%=transactionList.t_hash %>')"><%=transactionList.t_hash %></a></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transactionList.from %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transactionList.to %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transactionList.ether %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transactionList.cur_balance %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%=transactionList.getDate.year%>.<%=transactionList.getDate.month%>.<%=transactionList.getDate.day %>. <%=transactionList.getDate.hour%>:<%=transactionList.getDate.minute%>:<%=transactionList.getDate.second%></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-12" align="center">
+                <!-- 페이징 처리 -->
+                <nav>
+                    <ul class="pagination">
+                        <li>
+                            <a href="<%= paginate.href(true) %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    <% pages.forEach(function(page){ %>
+                        <li class="<%= paginate.page == page.number ? 'active' : ''%>">
+                            <a href="<%= page.url %>"><%= page.number %></a>
+                        </li>
+                    <%})%>
+                    <%if(paginate.hasNextPages(pageCount)){%>
+                        <li>
+                            <a href="<%= paginate.href() %>">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    <%}%>
+                    </ul>
+                </nav>
+          </div>
+        </div>
+      </div>
+    
+        
+
+<style type="text/css">
+.masonry-grid img { max-width: 260px; }
+</style>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript">
+    var $masonry_container = $('#masonry_container');
+    $masonry_container.imagesLoaded(function(){
+      $masonry_container.masonry({
+        itemSelector : '.masonry-grid',
+        columnWidth : 270
+      });
+    });
+</script>
+
+<% include ../footer.ejs %>
+<% include ../SC_import.ejs %>

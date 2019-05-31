@@ -1,0 +1,134 @@
+<% include ../header.ejs %>
+
+    <br/>   
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="/home">홈</a></li>
+              <li class="breadcrumb-item active">승인조회</li>
+            </ol>
+        <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-table"></i>승인 내역</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr align="center">
+                        <th width="5%" style="vertical-align: middle;">번호</th>
+                        <th width="6%" style="vertical-align: middle;" >증명서</th>
+                        <th width="10%" style="vertical-align: middle;">Fee_Hash</th>
+                        <th width="10%" style="vertical-align: middle;">Accept_Hash</th>
+                        <th width="10%" style="vertical-align: middle;">시간</th>
+                        <th width="5%" style="vertical-align: middle;">신청</th>
+                        <th width="5%" style="vertical-align: middle;">view</th>
+                        <!-- <th width="1%" style="vertical-align: middle;">GasPrice</th> -->
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr align="center">
+                        <th>번호</th>
+                        <th>증명서</th>
+                        <th>Fee_Hash</th>
+                        <th>Accept_Hash</th>
+                        <th>시간</th>
+                        <th>신청</th>
+                        <th>view</th>
+                        <!-- <th>GasPrice</th> -->
+                    </tr>
+                </tfoot>
+                    <tbody>
+                    <% requestdetail.forEach(function(requestdetail){ %>
+                    <tr align="center">
+                        <td style="vertical-align: middle; font-size: 0.7em;"><%= requestdetail.seq %></td>
+                        <td style="vertical-align: middle; font-size: 0.7em;">
+                            <!-- <a href="/accounts/transaction.id %>"> -->
+                            <%= requestdetail.form_name %>
+                            </a>
+                        </td>
+                        <td style="vertical-align: middle; font-size: 0.7em;">
+                            <a href='http://ropsten.etherscan.io/tx/<%=requestdetail.fee_tx%>'><%= requestdetail.fee_tx %></a>
+                        </td>
+                        <td style="vertical-align: middle; font-size: 0.7em;">
+                            <a href='http://ropsten.etherscan.io/tx/<%=requestdetail.accept_tx%>'><%= requestdetail.accept_tx %></a>
+                        </td>
+                        <td style="vertical-align: middle; font-size: 0.7em;">
+                                <%=requestdetail.getDate.year%>.
+                                <%=requestdetail.getDate.month%>.
+                                <%=requestdetail.getDate.day %>.
+                                <%=requestdetail.getDate.hour%>:
+                                <%=requestdetail.getDate.minute%>:
+                                <%=requestdetail.getDate.second%></td>
+                        <% if (requestdetail.fee_yn=='N'){ %>
+                            <td style="vertical-align: middle; font-size: 0.7em;"><input type="button" value="납부"  onclick="sendFee(<%=requestdetail.seq%>)" />  </td>
+                        <%}else{%>
+                            <td style="vertical-align: middle; font-size: 0.7em;">신청완료</td>
+                        <%}%>
+                            <td style="vertical-align: middle; font-size: 0.7em;"><a href="http://220.76.95.91:8080/ipfs/<%=requestdetail.ipfs_hash%>">보기</a>  </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-12" align="center">
+                <!-- 페이징 처리 -->
+                <nav>
+                    <ul class="pagination">
+                        <li>
+                            <a href="<%= paginate.href(true) %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    <% pages.forEach(function(page){ %>
+                        <li class="<%= paginate.page == page.number ? 'active' : ''%>">
+                            <a href="<%= page.url %>"><%= page.number %></a>
+                        </li>
+                    <%})%>
+                    <%if(paginate.hasNextPages(pageCount)){%>
+                        <li>
+                            <a href="<%= paginate.href() %>">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    <%}%>
+                    </ul>
+                </nav>
+          </div>
+        </div>
+      </div>
+    
+        
+
+<style type="text/css">
+.masonry-grid img { max-width: 260px; }
+</style>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript">
+    var $masonry_container = $('#masonry_container');
+    $masonry_container.imagesLoaded(function(){
+      $masonry_container.masonry({
+        itemSelector : '.masonry-grid',
+        columnWidth : 270
+      });
+    });
+</script>
+
+  <!-- 사용자 정보 받아오기 user_id, blockChainid, blockChainpw -->
+  <input type="hidden" id='user_id' value="<%=user.user_id%>"></input>
+  <input type="hidden" id='name' value="<%= user.user_name %>"></input>
+  <input type="hidden" id='blockchainpwd' value="<%= user.blockchainpwd %>"></input>
+  <input type="hidden" id='blockchainid' value="<%= user.blockchainid %>"></input>
+  
+  <!-- 사용자 정보 받아오기 user_id, blockChainid, blockChainpw -->
+
+<% include ../SC_import.ejs %>
+<% include ../footer.ejs %>
